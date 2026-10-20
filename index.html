@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nicolás Vrancovich</title>
+<meta name="description" content="Portafolio de Nicolás Vrancovich: proyectos, docencia y artículos de ciencia de datos.">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --text: #1d2125;
+    --muted: #5c6670;
+    --line: #dcd8cf;
+    --accent: #1155cc;
+    --ph-bg: #f1eee6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171a;
+      --surface: #1b1f23;
+      --text: #e8e6e1;
+      --muted: #9aa3ab;
+      --line: #2f353b;
+      --accent: #7aa7f0;
+      --ph-bg: #1f2428;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 56px;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 56px 16px 80px;
+  }
+
+  /* Barra lateral */
+  aside { align-self: start; position: sticky; top: 48px; }
+  aside h1 { font-size: 1.6rem; line-height: 1.2; margin: 0 0 16px; letter-spacing: -0.01em; }
+  aside img.foto {
+    display: block; width: 100%; max-width: 260px; aspect-ratio: 1 / 1; object-fit: cover;
+    border-radius: 6px; margin-bottom: 16px; background: var(--ph-bg);
+  }
+  aside .bio { margin: 0 0 16px; font-size: 0.92rem; color: var(--muted); }
+  .contact { display: flex; flex-direction: column; gap: 4px; font-size: 0.92rem; }
+
+  /* Contenido */
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+  .filters button {
+    font: inherit; font-size: 0.88rem; cursor: pointer;
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 999px; padding: 3px 14px;
+  }
+  .filters button[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .filters button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .year {
+    margin: 32px 0 4px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+    font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  }
+  .year[hidden] { display: none; }
+
+  article { padding: 20px 0 8px; border-bottom: 1px solid var(--line); }
+  article:last-child { border-bottom: 0; }
+  article[hidden] { display: none; }
+  .meta { display: flex; gap: 12px; font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  article h2 { font-size: 1.2rem; line-height: 1.3; margin: 2px 0 10px; }
+  article p { margin: 0 0 10px; font-size: 0.97rem; }
+
+
+  .links { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.93rem; margin: 4px 0 8px; }
+  .links a::after { content: " \2197"; font-size: 0.85em; }
+
+  .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 12px 0 12px; }
+  figure.shot { margin: 0; }
+  figure.shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; }
+  .placeholder {
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    min-height: 150px; padding: 16px; background: var(--ph-bg);
+    border: 1px dashed var(--line); border-radius: 6px;
+    color: var(--muted); font-size: 0.85rem;
+  }
+
+  .carousel {
+    display: flex; gap: 12px; margin: 12px 0; padding-bottom: 8px;
+    overflow-x: auto; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
+  }
+  .carousel img { flex: 0 0 auto; width: 274px; height: auto; scroll-snap-align: start; border-radius: 6px; }
+  .carousel--wide img { width: auto; height: 300px; }
+  .carousel--phone img { width: auto; height: 480px; }
+  .car-wrap { position: relative; }
+  .car-wrap .carousel { scrollbar-width: none; scroll-behavior: smooth; }
+  .car-wrap .carousel::-webkit-scrollbar { display: none; }
+  .car-btn, .lb-btn {
+    display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer;
+    border-radius: 50%; color: #fff; font: inherit;
+    background: rgba(20, 23, 26, .6); border: 1px solid rgba(255, 255, 255, .28);
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .35);
+    transition: background .15s, transform .15s;
+  }
+  .car-btn:hover, .lb-btn:hover { background: rgba(20, 23, 26, .85); }
+  .car-btn {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 1;
+    width: 38px; height: 38px;
+  }
+  .car-btn.prev { left: 6px; }
+  .car-btn.next { right: 6px; }
+  .car-btn[hidden] { display: none; }
+  .car-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .carousel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .carousel img { cursor: zoom-in; }
+  .lb {
+    position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+    background: rgba(10, 12, 14, .55); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  }
+  .lb[hidden] { display: none; }
+  .lb img { max-width: min(94vw, 1200px); max-height: 86vh; width: auto; height: auto; border-radius: 6px; box-shadow: 0 8px 40px rgba(0,0,0,.5); }
+  .lb-btn { position: absolute; width: 46px; height: 46px; }
+  .lb-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .lb-btn[hidden] { display: none; }
+  .lb-prev { left: 12px; top: 50%; transform: translateY(-50%); }
+  .lb-next { right: 12px; top: 50%; transform: translateY(-50%); }
+  .lb-close { right: 12px; top: 12px; }
+  .lb-count { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; color: #fff; font-size: 0.85rem; text-shadow: 0 1px 3px rgba(0,0,0,.7); }
+
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-top: 32px; }
+    aside { position: static; }
+    aside img.foto { max-width: 160px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <aside>
+    <h1>Nicolás Vrancovich</h1>
+    <img class="foto" src="img/foto.jpg" alt="Retrato de Nicolás Vrancovich" width="260" height="260">
+    <p class="bio">Estudiante avanzado de la Licenciatura en Ciencia de Datos de la UNSAM, con un perfil orientado al desarrollo de productos de datos que ayuden a las personas a aprender, decidir y descubrir.</p>
+    <nav class="contact" aria-label="Contacto">
+      <a href="https://linkedin.com/in/nvrancovich">LinkedIn</a>
+      <a href="https://github.com/nvranco">GitHub</a>
+      <a href="https://medium.com/@nvrancovich">Medium</a>
+      <a href="mailto:nvrancovich@gmail.com">nvrancovich@gmail.com</a>
+    </nav>
+  </aside>
+
+  <main>
+    <div class="filters" role="group" aria-label="Filtrar por tipo">
+      <button type="button" data-filter="all" aria-pressed="true">Todo</button>
+      <button type="button" data-filter="proyecto" aria-pressed="false">Proyectos</button>
+      <button type="button" data-filter="docencia" aria-pressed="false">Docencia</button>
+      <button type="button" data-filter="articulo" aria-pressed="false">Artículos</button>
+    </div>
+
+    <div class="year">2026</div>
+
+    <article data-type="proyecto">
+      <div class="meta"><span>Proyecto</span><span>2026</span></div>
+      <h2>Funes</h2>
+      <p>Desarrollé un sistema de recomendación que combina múltiples técnicas de ciencia de datos para proponer libros dentro del catálogo de una librería o biblioteca, a partir de una conversación corta con el lector.</p>
+      <p>Implementé una feature para digitalizar el stock de librerías de segunda mano a partir de fotos de estanterías mediante IA, que habilita la creación de catálogos digitales que los libreros pueden compartir en redes sociales.</p>
+      <p>Diseñé un recomendador conversacional basado en RAG que traduce las respuestas del lector a embeddings para encontrar los libros más afines del catálogo, y utiliza un modelo de lenguaje para generar preguntas profundas y redactar la recomendación.</p>
+      <p>Realicé un piloto con más de 300 estudiantes de la UBA, en el que el 68 % de las conversaciones terminó en una recomendación en unos 2 minutos y el 83 % de las valoradas aceptó al menos un libro.</p>
+      <div class="links">
+        <a href="https://ireneofunes.up.railway.app/funes/festina-lente">Demo</a>
+        <a href="https://github.com/nvranco/funes">Código</a>
+      </div>
+      <div class="carousel carousel--phone" role="region" aria-label="Capturas de Funes (deslizá para ver más)" tabindex="0">
+        <img src="img/funes-1-bienvenida.png" width="390" height="844" loading="lazy" alt="Pantalla de bienvenida de Funes: el asistente se presenta y propone comenzar la conversación">
+        <img src="img/funes-2-conversacion.png" width="390" height="844" loading="lazy" alt="Conversación en Funes: preguntas sobre qué busca el lector y qué nivel de desafío y longitud prefiere">
+        <img src="img/funes-3-recomendacion.png" width="390" height="844" loading="lazy" alt="Recomendación de Funes: Agua viva, de Clarice Lispector, con una reseña breve y tres botones para valorarla">
+        <img src="img/funes-4-detalles.png" width="390" height="844" loading="lazy" alt="Mensajes posteriores a la recomendación: descuento, sedes de la librería y botones para seguir la conversación">
+      </div>
+    </article>
+
+    <article data-type="proyecto">
+      <div class="meta"><span>Proyecto</span><span>2026</span></div>
+      <h2>Intervalo</h2>
+      <p>Desarrollé y difundí una aplicación para memorizar conceptos y fórmulas matemáticas que tuvo más de 3.000 usuarios y 100.000 ejercicios resueltos hasta la fecha en Argentina y Uruguay.</p>
+      <p>Construí un sistema de rating que estima la habilidad del usuario y la dificultad del contenido, logrando junto a otras características del producto una experiencia de aprendizaje dinámica y única.</p>
+      <p>Corrí experimentos A/B y recolecté feedback sobre las distintas etapas de uso del producto y prioricé las features a desarrollar que efectivamente mejoraron las métricas de activación, retención y experiencia.</p>
+      <div class="links">
+        <a href="https://www.intervalo.xyz/derivadas">Aplicación</a>
+        <a href="https://github.com/intervalo-ed/intervalo">Código</a>
+      </div>
+      <div class="carousel carousel--phone" role="region" aria-label="Capturas de Intervalo (deslizá para ver más)" tabindex="0">
+        <img src="img/intervalo-1-ejercicio.png" width="380" height="640" loading="lazy" alt="Ejercicio de Intervalo: derivada de x al cuadrado, con el teclado matemático en pantalla">
+        <img src="img/intervalo-2-correcto.png" width="380" height="640" loading="lazy" alt="Respuesta correcta a un ejercicio de derivadas, con los puntos ganados y el botón para ver la explicación">
+        <img src="img/intervalo-3-universidades.png" width="380" height="640" loading="lazy" alt="Ranking de universidades de Intervalo, con cantidad de estudiantes y ejercicios resueltos por cada una">
+        <img src="img/intervalo-4-estudiantes.png" width="380" height="640" loading="lazy" alt="Ranking de estudiantes de Intervalo, ordenado por puntos y con la universidad de cada uno">
+        <img src="img/intervalo-5-paises.png" width="380" height="640" loading="lazy" alt="Ranking de países de Intervalo: Argentina, Uruguay, Chile y Paraguay">
+        <img src="img/intervalo-6-repasar.png" width="380" height="640" loading="lazy" alt="Pantalla Repasar de Intervalo: multiplicador de XP, ítems desbloqueados y pendientes, y temas de funciones">
+        <img src="img/intervalo-7-ranking.png" width="380" height="640" loading="lazy" alt="Pantalla Ranking de Intervalo con estudiantes ordenados por puntos">
+        <img src="img/intervalo-8-grafico.png" width="380" height="640" loading="lazy" alt="Ejercicio con gráfico de una función logarítmica: se pregunta si es creciente o decreciente">
+        <img src="img/intervalo-9-explicacion.png" width="380" height="640" loading="lazy" alt="Respuesta correcta del ejercicio de la función logarítmica, con su explicación">
+      </div>
+    </article>
+
+    <article data-type="docencia">
+      <div class="meta"><span>Docencia</span><span>2026</span></div>
+      <h2>Instructor en IanSaura.com</h2>
+      <p>Dicté, junto a ex compañeros de Accenture, un bootcamp remoto de ocho clases para formar analistas de datos, cubriendo el recorrido completo del dato a partir de un proyecto integrador basado en un caso de negocio.</p>
+      <div class="links">
+        <a href="https://app.notion.com/p/bootcamp-data-analytics-iansaura/Bootcamp-Data-Analytics-Fundamentals-357b0b5544c880e7ad8fc30832a49daa">Contenido del curso</a>
+      </div>
+      <div class="carousel carousel--wide" role="region" aria-label="Capturas del bootcamp (deslizá para ver más)" tabindex="0">
+        <img src="img/bootcamp-1-pipeline.jpg" width="680" height="320" loading="lazy" alt="Diapositiva del bootcamp: el pipeline completo, de Jira a n8n, BigQuery, Data Studio y alertas en n8n">
+        <img src="img/bootcamp-2-clase.jpg" width="1102" height="625" loading="lazy" alt="Videollamada de una clase del bootcamp, con una pantalla compartida y los participantes en cámara">
+      </div>
+    </article>
+
+    <article data-type="docencia">
+      <div class="meta"><span>Docencia</span><span>2026</span></div>
+      <h2>Adscripto en Análisis Matemático II, UNSAM</h2>
+      <p>Compartí recursos y dicté clases en conjunto con los docentes de la materia Análisis Matemático II de mi carrera facilitando y motivando la interpretación de conceptos abstractos de la materia a través de aplicaciones de los mismos en ciencia de datos.</p>
+      <div class="carousel carousel--wide" role="region" aria-label="Material de la cátedra (deslizá para ver más)" tabindex="0">
+        <img src="img/catedra-1-funciones-de-costo.png" width="1200" height="675" loading="lazy" alt="Diapositiva sobre funciones de costo en aprendizaje supervisado: los parámetros del modelo y la función de costo como distancia entre estimaciones y realidad">
+        <img src="img/catedra-2-descenso-por-gradiente.png" width="1200" height="675" loading="lazy" alt="Diapositiva del algoritmo de ajuste del modelo: descenso por gradiente sobre la función de costo, con un gráfico que converge al mínimo">
+        <img src="img/catedra-3-entrenar-modelo.png" width="1200" height="675" loading="lazy" alt="Diapositiva de cierre: entrenar un modelo es minimizar su función de costo, y para eso se usa descenso por gradiente">
+        <img src="img/catedra-4-dialogo-socratico.png" width="1200" height="675" loading="lazy" alt="Diapositiva del diálogo socrático como protocolo entre estudiante y tutor, con un ejemplo sobre curvas de nivel">
+        <img src="img/catedra-5-conversaciones-gema.png" width="1200" height="675" loading="lazy" alt="Diapositiva con dos conversaciones del prototipo de tutor: una de teoría sobre redes neuronales y otra de práctica sobre dominios">
+        <img src="img/catedra-6-esquema-prototipo.png" width="1200" height="675" loading="lazy" alt="Esquema del prototipo de tutor de la Unidad 3: instrucciones, conocimiento y diálogo socrático con el estudiante, y links a materiales">
+      </div>
+    </article>
+
+    <div class="year">2025</div>
+
+    <article data-type="articulo">
+      <div class="meta"><span>Artículo</span><span>2025</span></div>
+      <h2>Distribución Normal y Media Maratón</h2>
+      <p>Recopilé y normalicé los resultados de todas las ediciones de la Media Maratón de Buenos Aires desde 2022 y publiqué las 86.000 filas como dataset abierto en Kaggle. Con esos datos analicé las edades y los tiempos de casi 25.000 corredores y verifiqué que los tiempos siguen una distribución normal, con poca variación entre grupos de edad.</p>
+      <div class="links">
+        <a href="https://medium.com/@nvrancovich/distribuci%C3%B3n-normal-y-media-marat%C3%B3n-d106dd7d8b28">Leer en Medium</a>
+        <a href="https://www.kaggle.com/datasets/nicolsvrancovich/buenos-aires-half-marathon-21k-results-20222025">Dataset en Kaggle</a>
+      </div>
+      <div class="carousel carousel--wide" role="region" aria-label="Capturas del artículo (deslizá para ver más)" tabindex="0">
+        <img src="img/maraton-1-distribucion.png" width="800" height="492" loading="lazy" alt="Histograma de corredores por tiempo de finalización en la Media Maratón de Buenos Aires 2025, con forma de campana de Gauss centrada cerca de las 2 horas">
+        <img src="img/maraton-2-corredores.jpg" width="800" height="600" loading="lazy" alt="Miles de corredores con remera verde en la largada de la Media Maratón de Buenos Aires">
+        <img src="img/maraton-3-comparacion.png" width="800" height="457" loading="lazy" alt="Gráfico de barras con el tiempo más rápido (00:58), el promedio (02:05) y el más lento (03:43) de la edición 2025">
+        <img src="img/maraton-4-edades.png" width="800" height="457" loading="lazy" alt="Diagramas de caja de los tiempos de finalización por grupo de edad en 2025: la mediana sube de forma leve con la edad">
+      </div>
+    </article>
+
+    <div class="year">2022</div>
+
+    <article data-type="articulo">
+      <div class="meta"><span>Artículo</span><span>2022</span></div>
+      <h2>Ciencia de Datos y tu Casa: San Martín</h2>
+      <p>Extraje mediante scraping más de 8.100 publicaciones de propiedades en venta del partido de General San Martín y las utilicé para analizar la distribución de precios mediante mapas.</p>
+      <div class="links">
+        <a href="https://medium.com/@nvrancovich/ciencia-de-datos-y-tu-casa-san-mart%C3%ADn-c74d3fcf621b">Leer en Medium</a>
+      </div>
+      <div class="carousel carousel--wide" role="region" aria-label="Capturas del artículo (deslizá para ver más)" tabindex="0">
+        <img src="img/san-martin-1-precio-m2.png" width="533" height="388" loading="lazy" alt="Mapa por barrios del partido de General San Martín con el precio promedio por metro cuadrado en dólares">
+        <img src="img/san-martin-2-cartel.jpg" width="640" height="480" loading="lazy" alt="Cartel de bienvenida al partido de General San Martín sobre una avenida">
+        <img src="img/san-martin-3-superficie.png" width="537" height="389" loading="lazy" alt="Mapa por barrios del partido de General San Martín con la superficie promedio de las propiedades en metros cuadrados">
+        <img src="img/san-martin-4-precio.png" width="537" height="390" loading="lazy" alt="Mapa por barrios del partido de General San Martín con el precio promedio de las propiedades en dólares">
+      </div>
+    </article>
+  </main>
+
+</div>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Imagen ampliada" hidden>
+  <button type="button" class="lb-btn lb-close" aria-label="Cerrar"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  <button type="button" class="lb-btn lb-prev" aria-label="Imagen anterior"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+  <img alt="">
+  <button type="button" class="lb-btn lb-next" aria-label="Imagen siguiente"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+  <div class="lb-count" aria-live="polite"></div>
+</div>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll('.filters button');
+    var articles = document.querySelectorAll('article');
+    var years = document.querySelectorAll('.year');
+    function apply(filter) {
+      articles.forEach(function (a) {
+        a.hidden = !(filter === 'all' || a.dataset.type === filter);
+      });
+      years.forEach(function (y) {
+        var next = y.nextElementSibling, visible = false;
+        while (next && !next.classList.contains('year')) {
+          if (next.tagName === 'ARTICLE' && !next.hidden) visible = true;
+          next = next.nextElementSibling;
+        }
+        y.hidden = !visible;
+      });
+      buttons.forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.dataset.filter === filter));
+      });
+    }
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () { apply(b.dataset.filter); });
+    });
+  })();
+
+  (function () {
+    var ICON_L = '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
+    var ICON_R = '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+    document.querySelectorAll('.carousel').forEach(function (c) {
+      var wrap = document.createElement('div');
+      wrap.className = 'car-wrap';
+      c.parentNode.insertBefore(wrap, c);
+      wrap.appendChild(c);
+      function mk(cls, label, icon) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'car-btn ' + cls;
+        b.setAttribute('aria-label', label); b.innerHTML = icon;
+        wrap.appendChild(b); return b;
+      }
+      var prev = mk('prev', 'Imagen anterior', ICON_L);
+      var next = mk('next', 'Imagen siguiente', ICON_R);
+      function step(dir) {
+        var first = c.querySelector('img');
+        c.scrollBy({ left: dir * (first.getBoundingClientRect().width + 12), behavior: 'smooth' });
+      }
+      prev.addEventListener('click', function () { step(-1); });
+      next.addEventListener('click', function () { step(1); });
+      function update() {
+        prev.hidden = c.scrollLeft < 4;
+        next.hidden = c.scrollLeft + c.clientWidth >= c.scrollWidth - 4;
+      }
+      c.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      c.querySelectorAll('img').forEach(function (i) { i.addEventListener('load', update); });
+      update();
+    });
+  })();
+
+  (function () {
+    var lb = document.getElementById('lb');
+    var big = lb.querySelector('img');
+    var count = lb.querySelector('.lb-count');
+    var prev = lb.querySelector('.lb-prev');
+    var next = lb.querySelector('.lb-next');
+    var gallery = [], idx = 0, opener = null;
+    function show() {
+      var im = gallery[idx];
+      big.src = im.currentSrc || im.src;
+      big.alt = im.alt;
+      count.textContent = (idx + 1) + ' / ' + gallery.length;
+      prev.hidden = next.hidden = gallery.length < 2;
+    }
+    function open(imgs, i, from) {
+      gallery = imgs; idx = i; opener = from;
+      show(); lb.hidden = false;
+      document.body.style.overflow = 'hidden';
+      lb.querySelector('.lb-close').focus();
+    }
+    function close() {
+      lb.hidden = true; big.removeAttribute('src');
+      document.body.style.overflow = '';
+      if (opener) opener.focus();
+    }
+    function go(d) { idx = (idx + d + gallery.length) % gallery.length; show(); }
+    document.querySelectorAll('.carousel').forEach(function (c) {
+      var imgs = Array.prototype.slice.call(c.querySelectorAll('img'));
+      imgs.forEach(function (im, i) {
+        im.addEventListener('click', function () { open(imgs, i, c); });
+      });
+    });
+    prev.addEventListener('click', function () { go(-1); });
+    next.addEventListener('click', function () { go(1); });
+    lb.querySelector('.lb-close').addEventListener('click', close);
+    lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') go(-1);
+      else if (e.key === 'ArrowRight') go(1);
+    });
+  })();
+</script>
+</body>
+</html>
